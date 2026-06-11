@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【DS】2026年5月品牌声量增长分析</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #fafafa;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --border: #e5e5e5;
+    --orange: #FF6B35;
+    --orange-light: #FFF3ED;
+    --tag-bg: #f5f5f5;
+    --tag-text: #4a4a4a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+
+  .header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header .subtitle span {
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+
+  .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .stat-card .stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  .stat-card .stat-value.highlight {
+    color: var(--orange);
+  }
+
+  .stat-card .stat-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-heading {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .common-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .common-card:hover { border-color: var(--orange); }
+
+  .common-card .card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .common-card .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .common-card .card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 20px;
+  }
+
+  .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .table-wrap th {
+    background: var(--text);
+    color: #fff;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .table-wrap td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  .table-wrap tr:last-child td { border-bottom: none; }
+
+  .table-wrap .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .table-wrap .num.orange { color: var(--orange); }
+
+  .brand-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .brand-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+
+  .brand-card.featured {
+    border-left: 3px solid var(--orange);
+  }
+
+  .brand-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .brand-rank {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .brand-hq {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .brand-hq-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .brand-hq-yoy {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--orange);
+    background: var(--orange-light);
+    padding: 2px 8px;
+  }
+
+  .brand-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .cat-tag {
+    font-size: 11px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+
+  .cat-tag .up {
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .brand-reason {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .brand-reason strong { color: var(--text); font-weight: 600; }
+
+  .insight-block {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .insight-block p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .insight-block p strong { color: var(--text); }
+
+  .tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+
+  .tag-pill {
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .tag-pill.orange {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: var(--orange-light);
+  }
+
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .tier-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    margin-bottom: 16px;
+  }
+
+  .tier-badge.t1 { background: var(--orange); color: #fff; }
+  .tier-badge.t2 { background: var(--text); color: #fff; }
+
+  @media (max-width: 1024px) {
+    .container { padding: 20px 24px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .brand-list { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .brand-list { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <h1>【DS】5月品牌声量增长分析</h1>
+    <div class="subtitle">
+      2026.05.01 - 2026.05.31 <span>|</span> 数据来源：MAY26月报 & 品牌动态关键词
+    </div>
+  </header>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-label">鞋服大盘 HQ 声量</div>
+      <div class="stat-value">9,723<span style="font-size:16px;color:var(--text-secondary);">万</span></div>
+      <div class="stat-note">同比 <span style="color:var(--orange);font-weight:700;">+43.0%</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">TOP20 HQ 增幅 >30%</div>
+      <div class="stat-value highlight">8<span style="font-size:16px;color:var(--text-secondary);">家</span></div>
+      <div class="stat-note">Adidas 以 +67.4% 居首</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">NIKE 库 品牌 (113)</div>
+      <div class="stat-value">5,195<span style="font-size:16px;color:var(--text-secondary);">万</span></div>
+      <div class="stat-note">HQ 同比 +22.6%</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: 五大共性 -->
+  <div class="section">
+    <div class="section-title">Part 1</div>
+    <div class="section-heading">5月品牌营销五大结构性共性</div>
+
+    <!-- 共性1 -->
+    <div class="common-card">
+      <div class="card-num">01</div>
+      <div class="card-title">618 预热升级为内容引擎</div>
+      <div class="table-wrap" style="margin:12px 0;">
+        <table>
+          <tr><th>品牌</th><th>策略</th><th>非追星文声量</th><th>互动量</th></tr>
+          <tr><td><strong>亚瑟士</strong></td><td>京东618 + 精英跑者故事</td><td class="num">6,557</td><td class="num">322,694</td></tr>
+          <tr><td><strong>迪卡侬</strong></td><td>引体向上挑战 + 骑遇百公里 UGC</td><td class="num">2,381</td><td class="num">97,857</td></tr>
+        </table>
+      </div>
+      <div class="card-desc">品牌内容+促销融合型活动的讨论质量显著高于单纯折扣内容。胜负手已从"让利力度"转向"内容记忆度"。</div>
+    </div>
+
+    <!-- 共性2 -->
+    <div class="common-card">
+      <div class="card-num">02</div>
+      <div class="card-title">世界杯预热进入实质阶段</div>
+      <div class="card-desc">
+        足球相关动态 <strong>49 条</strong>。Nike 以 6 条足球联名（Palace / VAA / Patta / Slawn / PEACEMINUSONE / NOCTA）覆盖街头、艺术、音乐、亚洲文化、欧洲足球、功能装备六个文化维度，非追星合计约 <strong>18,093</strong>。Adidas 集中资源于梅西 × Kith 超级联名（非追星 <strong>13,173</strong>）+ 4 大俱乐部球衣发布。两种路径：Nike 追求文化分层覆盖，Adidas 追求单点峰值引爆。
+      </div>
+      <div class="tag-pills" style="margin-top:12px;">
+        <span class="tag-pill orange">Nike 6 联名</span>
+        <span class="tag-pill">梅西 × Kith</span>
+        <span class="tag-pill">俱乐部球衣</span>
+        <span class="tag-pill orange">6-7月关键窗口</span>
+      </div>
+    </div>
+
+    <!-- 共性3 -->
+    <div class="insight-block">
+      <div class="card-num">03</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:10px;">联名走向"品牌×文化符号"，非追星文声量是衡量真实价值的标尺</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>联名合作</th><th>非追星文声量</th><th>关键词互动量</th></tr>
+          <tr><td>阿迪达斯 梅西 × Kith</td><td class="num orange">13,173</td><td class="num">2,230,283</td></tr>
+          <tr><td>迪卡侬 × Vibram MH900</td><td class="num orange">11,102</td><td class="num">742,114</td></tr>
+          <tr><td>Converse × MATSUI</td><td class="num orange">9,101</td><td class="num">649,674</td></tr>
+          <tr><td>凯乐石 × 四川美术学院</td><td class="num">2,751</td><td class="num">74,865</td></tr>
+          <tr><td>鸿星尔克 × 荣耀</td><td class="num">2,482</td><td class="num">137,269</td></tr>
+        </table>
+      </div>
+      <p>迪卡侬 × Vibram 和 Converse × MATSUI 的讨论集中在产品功能与穿搭场景，真实种草价值更优。阿迪达斯梅西 × Kith 以足球文化联名驱动话题。</p>
+    </div>
+
+    <!-- 共性4 -->
+    <div class="insight-block">
+      <div class="card-num">04</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:10px;">线下赛事进化为品牌社群长期资产</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>品牌</th><th>赛事 / 活动</th><th>非追星文声量</th><th>互动量</th><th>特征</th></tr>
+          <tr><td><strong>骆驼</strong></td><td>张家界七星山户外挑战赛</td><td class="num orange">24,597</td><td class="num">2,611,831</td><td>群众参与型</td></tr>
+          <tr><td><strong>凯乐石</strong></td><td>威海100超级越野赛</td><td class="num orange">8,711</td><td class="num">1,148,391</td><td>专业跑者自传播</td></tr>
+          <tr><td><strong>凯乐石</strong></td><td>Transvulcania 火山超马夺冠</td><td class="num orange">8,501</td><td class="num">1,078,964</td><td>国际赛事背书</td></tr>
+          <tr><td><strong>PUMA</strong></td><td>HYROX 上海站系列</td><td class="num">1,690</td><td class="num">175,808</td><td>精英体能赛</td></tr>
+          <tr><td><strong>特步</strong></td><td>钻石联赛厦门站观赛</td><td class="num">282</td><td class="num">139,566</td><td>田径赛事</td></tr>
+        </table>
+      </div>
+      <p>凯乐石威海100+Transvulcania双赛合计非追星 <strong>17,212</strong>。赛事参与是"产品驱动"而非"曝光驱动"，跑者自发讨论远高于赞助曝光型赛事。</p>
+    </div>
+
+    <!-- 共性5 -->
+    <div class="insight-block">
+      <div class="card-num">05</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:10px;">品类竞争进入"心智锚点"阶段</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">跑步鞋赛道</div>
+          <div class="table-wrap">
+            <table>
+              <tr><th>品牌</th><th>锚点</th><th>SOV</th><th>YoY</th></tr>
+              <tr><td>亚瑟士</td><td>专业跑者社群</td><td class="num">34.6%</td><td class="num orange">+32.3%</td></tr>
+              <tr><td>乔丹</td><td>大众性价比+体测</td><td class="num">25.4%</td><td class="num orange">+23.5%</td></tr>
+              <tr><td>特步</td><td>冠军背书+碳板</td><td class="num">24.8%</td><td class="num orange">+37.0%</td></tr>
+              <tr><td>李宁</td><td>竞速科技</td><td class="num">20.6%</td><td class="num orange">+39.4%</td></tr>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">防晒衣赛道</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            骆驼皮肤衣/防晒衣 YoY <span class="num" style="font-size:13px;">+45.6%</span>。<br>
+            品类红利未均等分配——骆驼通过张家界赛事将防晒衣从"通勤防晒"升级为"户外防晒"，心智锚点迁移是品类增长的本质驱动力。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: TOP20 诊断 -->
+  <div class="section">
+    <div class="section-title">Part 2</div>
+    <div class="section-heading">TOP20 品牌增长诊断</div>
+
+    <div class="table-wrap" style="margin-bottom:28px;">
+      <table>
+        <tr><th>基准</th><th>TTL声量</th><th>HQ声量</th><th>HQ同比</th><th>关键信号</th></tr>
+        <tr><td>鞋服大盘</td><td class="num">143,184,441</td><td class="num">97,229,057</td><td class="num orange">+43.0%</td><td>抖音+66.2%、快手+348.0% 驱动</td></tr>
+        <tr><td>NIKE库 (113)</td><td class="num">8,095,027</td><td class="num">5,195,498</td><td class="num orange">+22.6%</td><td>低于大盘增速</td></tr>
+        <tr><td>户外&运动 (81)</td><td class="num">6,917,668</td><td class="num">4,371,266</td><td class="num orange">+20.5%</td><td>抖音+156.8% 高度集中</td></tr>
+      </table>
+    </div>
+
+    <span class="tier-badge t1">第一梯队 HQ 同比 > 35%</span>
+    <div class="brand-list">
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">Adidas 阿迪达斯</div>
+          <div class="brand-rank">RANK 1</div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">763,949</div>
+          <div class="brand-hq-yoy">+67.4%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">休闲鞋 <span class="up">+33.0%</span></span>
+          <span class="cat-tag">T恤 <span class="up">+71.5%</span></span>
+          <span class="cat-tag">跑步鞋 <span class="up">+39.8%</span></span>
+        </div>
+        <div class="brand-reason">
+          <strong>①</strong> 梅西×Kith联名（非追星13,173）+ 曼联/阿森纳/拜仁/利物浦球衣发布 + FIFA复刻球衣<br>
+          <strong>②</strong> Chloe Kelly签约补充女足世界杯性别叙事<br>
+          <strong>③</strong> 抖音+209.9%，夏季基础款+短视频场景天然契合
+        </div>
+      </div>
+
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">Converse 匡威</div>
+          <div class="brand-rank">RANK 22</div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">89,434</div>
+          <div class="brand-hq-yoy">+64.7%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">帆布鞋 <span class="up">+72.7%</span></span>
+          <span class="cat-tag">双肩包 <span class="up">+380.8%</span></span>
+          <span class="cat-tag">休闲鞋 <span class="up">+1.6%</span></span>
+        </div>
+        <div class="brand-reason">
+          <strong>①</strong> 联名矩阵：MATSUI（非追星9,101）+ Madhappy（1,225）+ Feng Chen Wang（717），三文化切面合计11,043<br>
+          <strong>②</strong> 编织鞋面1970s（非追星8,322）经典款+技术创新<br>
+          <strong>③</strong> 快手+1,074.3%指数增长，UGC定制玩法驱动
+        </div>
+      </div>
+
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">乔丹 Qiaodan</div>
+          <div class="brand-rank">RANK 20</div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">95,712</div>
+          <div class="brand-hq-yoy">+49.7%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">跑步鞋 <span class="up">+23.5%</span></span>
+          <span class="cat-tag">T恤 <span class="up">+129.0%</span></span>
+          <span class="cat-tag">运动鞋 <span class="up">+138.1%</span></span>
+        </div>
+        <div class="brand-reason">
+          品类渗透型增长，非事件驱动。跑步鞋 SOV 25.4%，T恤+129.0%、运动鞋+138.1% 全面开花，指向抖音/微博中腰部达人系统性铺量。<br>
+          <strong style="color:var(--orange);">⚠ 得物-50.4%断崖下滑需警惕</strong>
+        </div>
+      </div>
+
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">特步 Xtep</div>
+          <div class="brand-rank">RANK 7 <span style="color:var(--orange);">↑8位</span></div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">165,497</div>
+          <div class="brand-hq-yoy">+46.2%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">跑步鞋 <span class="up">+37.0%</span></span>
+          <span class="cat-tag">T恤 <span class="up">+101.4%</span></span>
+          <span class="cat-tag">运动鞋 <span class="up">+100.2%</span></span>
+        </div>
+        <div class="brand-reason">
+          <strong>①</strong> 两千公里5代PRO + 轻舟ultra 双旗舰覆盖竞速&缓震<br>
+          <strong>②</strong> 钻石联赛厦门站+LFRC联名+刘景扬首秀组合拳<br>
+          <strong>③</strong> 品类下沉：向"运动生活方式品牌"扩展，降波动风险
+        </div>
+      </div>
+
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">凯乐石 Kailas</div>
+          <div class="brand-rank">RANK 23 <span style="color:var(--orange);">↑3位</span></div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">75,794</div>
+          <div class="brand-hq-yoy">+38.2%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">冲锋衣 <span class="up" style="color:var(--text-secondary);">-3.4%</span></span>
+          <span class="cat-tag">跑步鞋 <span class="up">+20.2%</span></span>
+          <span class="cat-tag">户外鞋靴 <span class="up">+37.8%</span></span>
+        </div>
+        <div class="brand-reason">
+          <strong>①</strong> 威海100+Transvulcania双赛非追星17,212，跑者自发讨论<br>
+          <strong>②</strong> 品类转型：从"冲锋衣=凯乐石"向越野跑装备延伸<br>
+          <strong>③</strong> 川美联名"中国山地色"（非追星2,751），拓展年轻潮流人群
+        </div>
+      </div>
+
+      <div class="brand-card featured">
+        <div class="brand-header">
+          <div class="brand-name">骆驼 Camel</div>
+          <div class="brand-rank">RANK 8 <span style="color:var(--orange);">↑3位</span></div>
+        </div>
+        <div class="brand-hq">
+          <div class="brand-hq-val">159,948</div>
+          <div class="brand-hq-yoy">+36.0%</div>
+        </div>
+        <div class="brand-cats">
+          <span class="cat-tag">防晒衣 <span class="up">+45.6%</span></span>
+          <span class="cat-tag">冲锋衣 <span class="up" style="color:var(--text-secondary);">-55.2%</span></span>
+          <span class="cat-tag">休闲鞋 <span class="up">+24.3%</span></span>
+        </div>
+        <div class="brand-reason">
+          <strong>①</strong> 张家界七星山非追星24,597，驱动小红书 <span style="color:var(--orange);">+14.1%</span>（TOP20唯一正增长）<br>
+          <strong>②</strong> 防晒衣从"通勤防晒"→"户外防晒"心智迁移<br>
+          <strong style="color:var(--orange);">⚠ 冲锋衣-55.2% 零和博弈风险</strong>
+        </div>
+      </div>
+    </div>
+
+    <span class="tier-badge t2" style="margin-top:32px;">第二梯队 HQ 同比 +10% ~ +30%</span>
+    <div class="brand-list">
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">Puma 彪马</div>
+          <div class="brand-rank">RANK 19</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">103,840</div><div class="brand-hq-yoy">+30.9%</div></div>
+        <div class="brand-reason">
+          <strong>①</strong> HYROX上海站（非追星1,690）精英体能赛差异化卡位<br>
+          <strong>②</strong> F1×足球双赛道：Lewis Hamilton + 内马尔<br>
+          <strong>③</strong> A$AP Rocky × PUMA Mostro（非追星535），T恤+158.6%
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">Asics 亚瑟士</div>
+          <div class="brand-rank">RANK 25 ↑4位</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">70,807</div><div class="brand-hq-yoy">+28.5%</div></div>
+        <div class="brand-reason">
+          <strong>①</strong> 跑鞋 SOV 34.6%（YoY +32.3%），品类集中度最高<br>
+          <strong>②</strong> blacktoes Quiet Room 限时空间，跑步文化精神层面<br>
+          <strong>③</strong> 青少年网球巡回赛，运动家庭触达
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">Anta 安踏</div>
+          <div class="brand-rank">RANK 4</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">291,498</div><div class="brand-hq-yoy">+25.5%</div></div>
+        <div class="brand-reason">
+          规模驱动型增长，48条活动（TOP3）。T恤品类 <span style="color:var(--orange);">+183.2%</span> — 5月TOP20单品类最高增速。抖音/微博夏季基础款达人铺量。
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">Nike 耐克</div>
+          <div class="brand-rank">RANK 2</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">719,102</div><div class="brand-hq-yoy">+12.2%</div></div>
+        <div class="brand-cats">
+          <span class="cat-tag">休闲鞋 <span class="up">+5.4%</span></span>
+          <span class="cat-tag">篮球鞋 <span class="up" style="color:var(--text-secondary);">-10.7%</span></span>
+          <span class="cat-tag">跑步鞋 <span class="up">+26.8%</span></span>
+        </div>
+        <div class="brand-reason">6条足球联名驱动世界杯预热，但篮球鞋-10.7%、HQ增速仅为Adidas的1/5。</div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">Li-Ning 李宁</div>
+          <div class="brand-rank">RANK 3</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">323,425</div><div class="brand-hq-yoy">+15.8%</div></div>
+        <div class="brand-reason">
+          跑鞋品类驱动：利刃（环比+43.5%，同比+45.7%）、反伍（环比+32.0%）贡献核心增量。
+        </div>
+      </div>
+
+      <div class="brand-card">
+        <div class="brand-header">
+          <div class="brand-name">迪卡侬 Decathlon</div>
+          <div class="brand-rank">RANK 14 ↑2位</div>
+        </div>
+        <div class="brand-hq"><div class="brand-hq-val">127,642</div><div class="brand-hq-yoy">+11.2%</div></div>
+        <div class="brand-reason">
+          Vibram联名（非追星11,102）为峰值内容。户外鞋靴品类 <span style="color:var(--orange);">+207.2%</span>。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      数据截止：2026.05.31 &nbsp;|&nbsp; 数据来源：【DS】MAY26月报_数据更新_0609.xlsx（Sheet: TOP20BRAND）· 品牌动态月度批量跑数-keyword.xlsx（Sheet: 条件A，1,567条动态）
+    </div>
+    <div>【DS】品牌声量月度诊断</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
